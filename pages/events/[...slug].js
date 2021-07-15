@@ -3,6 +3,9 @@ import { getFilteredEvents } from '../../dummy-data'
 
 import EventList from '../../components/events/EventList'
 import ResultsTitle from '../../components/events/results-title'
+import { Fragment } from 'react'
+import Button from '../../components/ui/Button'
+import ErrorAlert from '../../components/ui/error-alert'
 
 function FilteredEventsPage() {
     const router = useRouter()
@@ -21,7 +24,14 @@ function FilteredEventsPage() {
 
     if (isNaN(numYear) || isNaN(numMonth) || numYear > 2030
         || numYear < 2021 || numMonth < 1 || numMonth > 12) {
-        return <p>Invalid filter, please adjust your values!</p>
+        return <Fragment>
+            <ErrorAlert>
+                <p>Invalid filter. Please adjust values!</p>
+            </ErrorAlert>
+            <div className='center'>
+                <Button link='/events'>Show All Events</Button>
+            </div>
+        </Fragment>
     }
 
     const filteredEvents = getFilteredEvents({
@@ -30,7 +40,12 @@ function FilteredEventsPage() {
     })
 
     if (!filteredEvents || filteredEvents.length === 0) {
-        return <p>No events found for the chosen filter!</p>
+        return <Fragment>
+            <p>No events found for the chosen filter!</p>
+            <div className='center'>
+                <Button link='/events'>Show All Events</Button>
+            </div>
+        </Fragment>
     }
 
     const date = new Date(numYear, numMonth - 1)
